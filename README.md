@@ -1,17 +1,50 @@
-<br />
-<p align="center">
-  <a href="https://arbitrum.io/">
-    <img src="https://arbitrum.io/assets/arbitrum/logo_color.png" alt="Logo" width="80" height="80">
-  </a>
+## Fairblock Fork of Nitro
 
-  <h3 align="center">Arbitrum Nitro + EigenDA</h3>
+This is a fork of the [Arbitrum Nitro repo](https://github.com/Layr-Labs/nitro). It is purely for educational purposes. This repo is currently being used with the Fairblock `orbit-setup-script` repo to showcase the deployment of an EVM chain with precompiles in an Orbit Chain. The methods used to incorporate the Fairblock precompiles into this EVM are the same to be used for any other EVM. Simply modify the `contracts.go` with the Fairblock precompiles and ensure that other dependencies are installed.
 
-  <p align="center">
-    <a href="https://developer.arbitrum.io/"><strong>Next Generation Ethereum L2 Technology »</strong></a>
-    <br />
-  </p>
-</p>
+When setting up this repo following the Fairblock `orbit-setup-script` repo quickstart, make sure you go through the following steps. These steps are outlined in the Fairblock `orbit-setup-script` repo quickstart, but are also placed here for convenience.
 
+1. Run the docker container for the modified nitro node so it running persistently on your local machine.
+
+## Dependencies
+
+At the root, run the following command to install the dependencies.
+
+```shell
+git submodule sync
+git submodule update --init --recursive --force
+```
+
+Find a folder called `quickstart`. Within this folder, you will find a version of `contracts.go` that has the FairBlock pre-compiles already added in.
+
+Move the `contracts.go` to the path `go-ethereum/core/vm`, replacing the `contracts.go` file already there.
+
+With that in place, run the following command to regenerate your `nitro-node` docker image locally:
+
+```bash
+make docker
+```
+
+<!-- TODO: troubleshoot this setup, because I think there is a part in the nitros repo setup where the nodeConfig.json is needed -->
+
+Next, you are going to run do the following:
+
+- Create a nitro node local docker container running in the background until it is closed.
+- Expose it via port 8449
+- Tag the docker container under the name `nitro-node-dev`
+
+To do this, run the following command:
+
+```bash
+docker run --rm -it -v $(pwd)/config:/home/user/.arbitrum -p 8449:8449 nitro-node-dev --conf.file /home/user/.arbitrum/nodeConfig.json
+```
+
+Now you have your nitro node running locally. You can now setup your Orbit chain and run tests with a sealed bid auction example on said chain. Jump back to the Fairblock `orbit-setup-script` repo quickstart.
+
+If you'd like to read up on the Arbitrum Nitro original repo, check out the toggle below.
+
+<details>
+<summary>Arbitrum Nitro Original README</summary>
 
 ## About Arbitrum Nitro
 
@@ -55,3 +88,9 @@ For those that prefer to deploy the Nitro software either directly on Ethereum (
 Discord - [Arbitrum](https://discord.com/invite/5KE54JwyTs)
 
 Twitter: [Arbitrum](https://twitter.com/arbitrum)
+
+
+</details>
+
+
+
